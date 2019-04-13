@@ -16,27 +16,36 @@
   <footer>info and links</footer>
 
   <script>
+    // TODO: do we need to hide the links to the page?
+    // private key stuff - check into this
+    // write up a blog post about this procedure - reference other websites:
+    // https://coderwall.com/p/duapqq/use-a-google-spreadsheet-as-your-json-backend
+    // https://stackoverflow.com/questions/24531351/retrieve-google-spreadsheet-worksheet-json
     const studyLink = 'https://spreadsheets.google.com/feeds/list/1PMWsPEfHFC6myMwhdidyr2hhRK5ZA-JrDQzwRoDTFaw/oua1i2d/public/values?alt=json-in-script&callback=text';
     const studyGroups = document.querySelector('#study-groups');
     const buildGroups = document.querySelector('#build-groups');
+    
+    const studyGroupArr = grabGroup(studyLink);
+    // const buildGroupArr = grabGroup(studyLink);
 
-    // having CORB issues - text/plain does not error, but returns no data.
-    fetch(studyLink, { headers: {'Content-Type': 'text/plain; charset=utf-8'} })
-      .then((blob) => blob.text())
-      .then((text) => {
-        let studyText = text
-                          .replace('// API callback\ntext(', '')
-                          .replace(');', '');
-        let studyObj = JSON.parse(studyText);
-        console.log(studyObj);
-      })
-      .catch((err) => {
-        console.log('error', err);
-        alert('sorry, we have no bananas.')
-      }
-    );
+    console.log(studyGroupArr);
 
-    // ; Access-Control-Allow-Origin: *
+    function grabGroup(link) {
+      return fetch(link, { headers: {'Content-Type': 'text/plain; charset=utf-8'} })
+        .then((blob) => blob.text())
+        .then((text) => {
+          let sheetText = text.replace('// API callback\ntext(', '')
+                              .replace(');', '');
+          let groupObj = JSON.parse(sheetText);
+          groupArr = groupObj.feed.entry;
+          return groupArr
+        })
+        .catch((err) => {
+          console.log('error', err);
+          alert('sorry, we have no bananas.')
+        }
+      );
+    }
 
   </script>
 
