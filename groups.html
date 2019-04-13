@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+  <title>w3Develops Groups Display</title>
+</head>
+
+<body>
+  <header>some info about what is on this page</header>
+  <nav>navigation links</nav>
+
+  <!-- will programmatically add groups to each section -->
+  <section id="study-groups">Study Groups</section>
+  <section id="build-groups">Build Groups</section>
+
+  <footer>info and links</footer>
+
+  <script>
+    const studyLink = 'https://spreadsheets.google.com/feeds/list/1PMWsPEfHFC6myMwhdidyr2hhRK5ZA-JrDQzwRoDTFaw/oua1i2d/public/values?alt=json-in-script&callback=text';
+    const studyGroups = document.querySelector('#study-groups');
+    const buildGroups = document.querySelector('#build-groups');
+
+    // having CORB issues - text/plain does not error, but returns no data.
+    fetch(studyLink, { headers: {'Content-Type': 'text/plain; charset=utf-8'} })
+      .then((blob) => blob.text())
+      .then((text) => {
+        let studyText = text
+                          .replace('// API callback\ntext(', '')
+                          .replace(');', '');
+        let studyObj = JSON.parse(studyText);
+        console.log(studyObj);
+      })
+      .catch((err) => {
+        console.log('error', err);
+        alert('sorry, we have no bananas.')
+      }
+    );
+
+    // ; Access-Control-Allow-Origin: *
+
+  </script>
+
+</body>
+
+</html>
