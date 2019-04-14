@@ -22,29 +22,177 @@
     // https://coderwall.com/p/duapqq/use-a-google-spreadsheet-as-your-json-backend
     // https://stackoverflow.com/questions/24531351/retrieve-google-spreadsheet-worksheet-json
     const studyLink = 'https://spreadsheets.google.com/feeds/list/1PMWsPEfHFC6myMwhdidyr2hhRK5ZA-JrDQzwRoDTFaw/oua1i2d/public/values?alt=json-in-script&callback=text';
-    const studyGroups = document.querySelector('#study-groups');
-    const buildGroups = document.querySelector('#build-groups');
+    const buildLink = 'https://spreadsheets.google.com/feeds/list/1PMWsPEfHFC6myMwhdidyr2hhRK5ZA-JrDQzwRoDTFaw/oua1i2d/public/values?alt=json-in-script&callback=text';
+    const groupSelectors = 
+      [document.querySelector('#study-groups'), document.querySelector('#build-groups')];
+
+    const htmlFull12am = [];
+    const htmlFull6am = [];
+    const htmlFull12pm = [];
+    const htmlFull6pm = [];
+    const htmlPart12am = [];
+    const htmlPart6am = [];
+    const htmlPart12pm = [];
+    const htmlPart6pm = [];
+
+    const jsFull12am = [];
+    const jsFull6am = [];
+    const jsFull12pm = [];
+    const jsFull6pm = [];
+    const jsPart12am = [];
+    const jsPart6am = [];
+    const jsPart12pm = [];
+    const jsPart6pm = [];
+
+    const reactFull12am = [];
+    const reactFull6am = [];
+    const reactFull12pm = [];
+    const reactFull6pm = [];
+    const reactPart12am = [];
+    const reactPart6am = [];
+    const reactPart12pm = [];
+    const reactPart6pm = [];
+
+    appendGroups();
     
-    const studyGroupArr = grabGroup(studyLink);
-    // const buildGroupArr = grabGroup(studyLink);
+    async function appendGroups() {
+      const groupsList = await Promise.all([grabGroup(studyLink), grabGroup(buildLink)]);
+      const study = groupsList[0];
+      const build = groupsList[1];
 
-    console.log(studyGroupArr);
+      sortPeople(study);
 
-    function grabGroup(link) {
-      return fetch(link, { headers: {'Content-Type': 'text/plain; charset=utf-8'} })
-        .then((blob) => blob.text())
-        .then((text) => {
-          let sheetText = text.replace('// API callback\ntext(', '')
-                              .replace(');', '');
-          let groupObj = JSON.parse(sheetText);
-          groupArr = groupObj.feed.entry;
-          return groupArr
-        })
-        .catch((err) => {
+      // function createUL(arr) {
+      //   // conditional to pick the ordered list label
+      //   // conditional to create new list once 6 are in a list
+      //   // 
+      // }
+
+      // const groupHTML = group;
+      // groupSelectors[idx].append(groupHTML);
+    }
+
+    async function grabGroup(link) {
+      try {
+        let res = await fetch(link,
+          { headers: {'Content-Type': 'text/plain; charset=utf-8'} });
+        let text = await res.text();
+        let sheetText = await text.replace('// API callback\ntext(', '')
+                                  .replace(');', '');
+        let groupObj = await JSON.parse(sheetText);
+        let groupArr = await groupObj.feed.entry;
+        console.log('groupArr', groupArr);
+        return groupArr;
+      } catch(err) {
           console.log('error', err);
           alert('sorry, we have no bananas.')
         }
-      );
+    }
+
+    function sortPeople(people) {
+      // this giant conditional sort feels really really hacky
+      // TODO: find a better way to sort/filter the users
+      people.forEach((person) => {
+        if (person.gsx$technology.$t === 'HTML & CSS'
+            && person.gsx$commitment.$t === 'full time - 6 hours a day'
+            && person.gsx$beginning.$t === '12 am') {
+          htmlFull12am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'HTML & CSS'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '6 am') {
+          htmlFull6am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'HTML & CSS'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '12 pm') {
+          htmlFull12pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'HTML & CSS'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '6 pm') {
+          htmlFull6pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'HTML & CSS'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '12 am') {
+          htmlPart12am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'HTML & CSS'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '6 am') {
+          htmlPart6am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'HTML & CSS'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '12 pm') {
+          htmlPart12pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'HTML & CSS'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '6 pm') {
+          htmlFull6pm.push(person.gsx$username.$t);
+        }
+        if (person.gsx$technology.$t === 'JavaScript'
+            && person.gsx$commitment.$t === 'full time - 6 hours a day'
+            && person.gsx$beginning.$t === '12 am') {
+          jsFull12am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'JavaScript'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '6 am') {
+          jsFull6am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'JavaScript'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '12 pm') {
+          jsFull12pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'JavaScript'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '6 pm') {
+          jsFull6pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'JavaScript'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '12 am') {
+          jsPart12am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'JavaScript'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '6 am') {
+          jsPart6am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'JavaScript'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '12 pm') {
+          jsPart12pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'JavaScript'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '6 pm') {
+          jsFull6pm.push(person.gsx$username.$t);
+        }
+        if (person.gsx$technology.$t === 'React'
+            && person.gsx$commitment.$t === 'full time - 6 hours a day'
+            && person.gsx$beginning.$t === '12 am') {
+          reactFull12am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'React'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '6 am') {
+          reactFull6am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'React'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '12 pm') {
+          reactFull12pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'React'
+                  && person.gsx$commitment.$t === 'full time - 6 hours a day'
+                  && person.gsx$beginning.$t === '6 pm') {
+          reactFull6pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'React'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '12 am') {
+          reactPart12am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'React'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '6 am') {
+          reactPart6am.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'React'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '12 pm') {
+          reactPart12pm.push(person.gsx$username.$t);
+        }else if (person.gsx$technology.$t === 'React'
+                  && person.gsx$commitment.$t === 'part time - 3 hours a day'
+                  && person.gsx$beginning.$t === '6 pm') {
+          reactFull6pm.push(person.gsx$username.$t);
+        }
+      });
     }
 
   </script>
