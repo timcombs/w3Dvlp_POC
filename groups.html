@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
   <title>w3Develops Groups Display</title>
+  <link rel="stylesheet" type="css/text" href="style.css">
 </head>
 
 <body>
@@ -64,6 +65,31 @@
 
       sortPeople(study);
       createUL(htmlFull12am, studySelector);
+      createUL(htmlFull6am, studySelector);
+      createUL(htmlFull12pm, studySelector);
+      createUL(htmlFull6pm, studySelector);
+      createUL(htmlPart12am, studySelector);
+      createUL(htmlPart6am, studySelector);
+      createUL(htmlPart12pm, studySelector);
+      createUL(htmlPart6pm, studySelector);
+
+      createUL(jsFull12am, studySelector);
+      createUL(jsFull6am, studySelector);
+      createUL(jsFull12pm, studySelector);
+      createUL(jsFull6pm, studySelector);
+      createUL(jsPart12am, studySelector);
+      createUL(jsPart6am, studySelector);
+      createUL(jsPart12pm, studySelector);
+      createUL(jsPart6pm, studySelector);
+
+      createUL(reactFull12am, studySelector);
+      createUL(reactFull6am, studySelector);
+      createUL(reactFull12pm, studySelector);
+      createUL(htmlFull6pm, studySelector);
+      createUL(reactPart12am, studySelector);
+      createUL(reactPart6am, studySelector);
+      createUL(reactPart12pm, studySelector);
+      createUL(reactPart6pm, studySelector);
 
       // function to pass study group arrays to build strings of html that 
       // are unorderlists of group participants 
@@ -131,9 +157,6 @@
 
         selector.insertAdjacentHTML('beforeend', htmlString);
       }
-
-      // const groupHTML = group;
-      // groupSelectors[idx].append(groupHTML);
     }
 
     async function grabGroup(link) {
