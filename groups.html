@@ -16,6 +16,8 @@
   <footer>info and links</footer>
 
   <script>
+    // TODO: need to break this into modules rather than one long file
+
     // TODO: do we need to hide the links to the page?
     // private key stuff - check into this
     // write up a blog post about this procedure - reference other websites:
@@ -23,35 +25,35 @@
     // https://stackoverflow.com/questions/24531351/retrieve-google-spreadsheet-worksheet-json
     const studyLink = 'https://spreadsheets.google.com/feeds/list/1PMWsPEfHFC6myMwhdidyr2hhRK5ZA-JrDQzwRoDTFaw/oua1i2d/public/values?alt=json-in-script&callback=text';
     const buildLink = 'https://spreadsheets.google.com/feeds/list/1PMWsPEfHFC6myMwhdidyr2hhRK5ZA-JrDQzwRoDTFaw/oua1i2d/public/values?alt=json-in-script&callback=text';
-    const groupSelectors = 
-      [document.querySelector('#study-groups'), document.querySelector('#build-groups')];
+    const studySelector = document.querySelector('#study-groups');
+    const buildSelector = document.querySelector('#build-groups');
 
-    const htmlFull12am = [];
-    const htmlFull6am = [];
-    const htmlFull12pm = [];
-    const htmlFull6pm = [];
-    const htmlPart12am = [];
-    const htmlPart6am = [];
-    const htmlPart12pm = [];
-    const htmlPart6pm = [];
+    const htmlFull12am = ['HTML & CSS - Full Time - 12AM'];
+    const htmlFull6am = ['HTML & CSS - Full Time - 6AM'];
+    const htmlFull12pm = ['HTML & CSS - Full Time - 12PM'];
+    const htmlFull6pm = ['HTML & CSS - Full Time - 6PM'];
+    const htmlPart12am = ['HTML & CSS - Part Time - 12AM'];
+    const htmlPart6am = ['HTML & CSS - Part Time - 6AM'];
+    const htmlPart12pm = ['HTML & CSS - Part Time - 12PM'];
+    const htmlPart6pm = ['HTML & CSS - Part Time - 6PM'];
 
-    const jsFull12am = [];
-    const jsFull6am = [];
-    const jsFull12pm = [];
-    const jsFull6pm = [];
-    const jsPart12am = [];
-    const jsPart6am = [];
-    const jsPart12pm = [];
-    const jsPart6pm = [];
+    const jsFull12am = ['JavaScript - Full Time - 12AM'];
+    const jsFull6am = ['JavaScript - Full Time - 6AM'];
+    const jsFull12pm = ['JavaScript - Full Time - 12PM'];
+    const jsFull6pm = ['JavaScript - Full Time - 6PM'];
+    const jsPart12am = ['JavaScript - Full Time - 12AM'];
+    const jsPart6am = ['JavaScript - Full Time - 6AM'];
+    const jsPart12pm = ['JavaScript - Full Time - 12PM'];
+    const jsPart6pm = ['JavaScript - Full Time - 6PM'];
 
-    const reactFull12am = [];
-    const reactFull6am = [];
-    const reactFull12pm = [];
-    const reactFull6pm = [];
-    const reactPart12am = [];
-    const reactPart6am = [];
-    const reactPart12pm = [];
-    const reactPart6pm = [];
+    const reactFull12am = ['React - Full Time - 12AM'];
+    const reactFull6am = ['React - Full Time - 6AM'];
+    const reactFull12pm = ['React - Full Time - 12PM'];
+    const reactFull6pm = ['React - Full Time - 6PM'];
+    const reactPart12am = ['React - Full Time - 12AM'];
+    const reactPart6am = ['React - Full Time - 6AM'];
+    const reactPart12pm = ['React - Full Time - 12PM'];
+    const reactPart6pm = ['React - Full Time - 6PM'];
 
     appendGroups();
     
@@ -61,12 +63,74 @@
       const build = groupsList[1];
 
       sortPeople(study);
+      createUL(htmlFull12am, studySelector);
 
-      // function createUL(arr) {
-      //   // conditional to pick the ordered list label
-      //   // conditional to create new list once 6 are in a list
-      //   // 
-      // }
+      // function to pass study group arrays to build strings of html that 
+      // are unorderlists of group participants 
+      function createUL(arr, selector) {
+        // conditional to create new list once 6 are in a list
+        let label = arr[0];
+        let len = arr.length;
+
+        let htmlString = '';
+        let liString = '';
+
+        for (let i = 1; i < len; i++) {
+          if (i % 6 === 0) {
+            liString +=
+            `
+            <li>
+              ${arr[i]}
+            </li>
+            `;
+            htmlString = 
+            `
+            <figure>
+            <figcaption>${arr[0]}</figcaption>
+              <ul>
+                ${liString}
+              </ul>
+            </figure>
+            `;
+            selector.insertAdjacentHTML('beforeend', htmlString);
+            htmlString = '';
+            liString = '';
+          }else if (i === len - 1 && (len - 1) % 6 !== 0) {
+            liString +=
+            `
+            <li>
+              ${arr[i]}
+            </li>
+            `;
+            for (let j = 0; j < 6 - len; j++) {
+              liString += 
+              `<li>
+                open
+              </li>
+              `;
+            }
+          }else {
+            liString +=
+            `
+            <li>
+              ${arr[i]}
+            </li>
+            `;
+          }
+
+          htmlString = 
+            `
+            <figure>
+            <figcaption>${arr[0]}</figcaption>
+              <ul>
+                ${liString}
+              </ul>
+            </figure>
+            `;
+        }
+
+        selector.insertAdjacentHTML('beforeend', htmlString);
+      }
 
       // const groupHTML = group;
       // groupSelectors[idx].append(groupHTML);
