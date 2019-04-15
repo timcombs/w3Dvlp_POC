@@ -19,3 +19,10 @@ Once a participant signs up for a group:
     - React
   - Beginning - time to start study group midnight, 6 am, noon, 6 pm
 
+## tips to consider
+Parsing the JSON is pretty simple as well:
+```
+for(var key in data.feed.entry) {
+  console.log(data.feed.entry[key]['gsx$title']['$t']);
+};
+```
